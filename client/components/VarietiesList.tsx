@@ -1,8 +1,11 @@
 import { useQuery } from '@tanstack/react-query'
 import { getVarieties } from '../apis/varieties'
 import DeleteButton from './DeleteButton'
+import { useState } from 'react'
+import EditVariety from './EditVariety'
 
 function VarietiesList() {
+  const [editingId, setEditingId] = useState<number | null>(null)
   const {
     data: varieties,
     isPending,
@@ -22,7 +25,16 @@ function VarietiesList() {
         {varieties.map((variety) => {
           return (
             <li key={variety.id}>
-              {variety.name} <DeleteButton id={variety.id} />
+              {variety.name} <DeleteButton id={variety.id} />{' '}
+              <button type="button" onClick={() => setEditingId(variety.id)}>
+                Edit
+              </button>
+              {editingId === variety.id && (
+                <EditVariety
+                  variety={variety}
+                  onDone={() => setEditingId(null)}
+                />
+              )}
             </li>
           )
         })}
