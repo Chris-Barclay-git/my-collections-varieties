@@ -6,7 +6,10 @@
   "repository": "https://https://github.com/dev-academy-challenges/my-fullstack-collection",
   "main": "server/index.ts",
   "scripts": {
+    
     "start": "node dist/server.js",
+    "render:build": "npm install && npm run build && npm prune --omit=dev && NODE_ENV='production' npm run knex migrate:latest",
+"render:start": "node dist/server.js",
     "dev": "run-p dev:client dev:server",
     "dev:client": "vite",
     "dev:server": "tsx watch server/index.ts",
@@ -33,6 +36,7 @@
     "@devacademy/eslint-config": "^1.10.2",
     "express": "^4.22.1",
     "knex": "^2.5.1",
+    "pg": "^8.23.1",
     "sqlite3": "^5.1.7",
     "superagent": "^10.2.2"
   },
