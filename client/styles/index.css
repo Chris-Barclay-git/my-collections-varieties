@@ -1,3 +1,7 @@
+/* Optional display font (with a width axis for the condensed heading).
+   If it fails to load, the system-ui fallback is used. */
+@import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,200..800&display=swap');
+
 :root {
   --claret: #3a0f1d;
   --claret-light: #7a1f3d;
@@ -19,14 +23,23 @@
   box-sizing: border-box;
 }
 
-body {
-  margin: 0;
-  min-height: 100vh;
-  font-family: var(--font);
-  font-size: 1rem;
-  line-height: 1.5;
-  color: var(--blush);
+/* Background lives on <html> so <body> can be the centred container.
+   The two thin rings are a glass left on the table. */
+html {
+  min-height: 100%;
   background:
+    radial-gradient(
+      circle at 90% 9%,
+      transparent 0 9rem,
+      rgba(247, 228, 234, 0.13) 9rem 9.2rem,
+      transparent 9.2rem
+    ),
+    radial-gradient(
+      circle at 86% 11%,
+      transparent 0 8.4rem,
+      rgba(247, 228, 234, 0.07) 8.4rem 8.55rem,
+      transparent 8.55rem
+    ),
     radial-gradient(
       ellipse at 15% -10%,
       var(--claret-light) 0%,
@@ -36,43 +49,82 @@ body {
   background-attachment: fixed;
 }
 
-#root {
+/* The centred, max-width container. Works whatever your root element is called. */
+body {
   width: 100%;
-  max-width: 38rem;
+  max-width: 40rem;
   margin: 0 auto;
   padding: clamp(1.5rem, 6vw, 4rem) 1rem 4rem;
+  font-family: var(--font);
+  font-size: 1rem;
+  line-height: 1.5;
+  color: var(--blush);
   text-align: center;
 }
 
+/* The memorable bit: huge, condensed, tilted heading with a vine underline */
 h1 {
-  margin: 0 0 2rem;
-  font-size: clamp(2.75rem, 12vw, 5rem);
+  margin: 0 0 2.5rem;
+  font-size: clamp(3.5rem, 19vw, 6.75rem);
   font-weight: 800;
-  line-height: 1;
+  font-stretch: 75%;
+  line-height: 0.9;
   letter-spacing: -0.03em;
   text-wrap: balance;
   text-decoration: underline;
   text-decoration-color: var(--vine);
-  text-decoration-thickness: 0.1em;
-  text-underline-offset: 0.18em;
+  text-decoration-thickness: 0.07em;
+  text-underline-offset: 0.14em;
+  transform: rotate(-2deg);
 }
 
+h2 {
+  margin: 0 0 1rem;
+  font-size: clamp(1.4rem, 4.5vw, 1.75rem);
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+  text-align: left;
+}
+
+/* The list heading gets a rule that runs out to the edge of the column */
+h2:not(form h2) {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+h2:not(form h2)::after {
+  content: '';
+  flex: 1;
+  height: 2px;
+  background: var(--vine);
+  opacity: 0.6;
+}
+
+/* Add form: a tasting card with a printed inner frame */
 form {
   display: flex;
   flex-direction: column;
   gap: 1rem;
-  margin-bottom: 2.5rem;
-  padding: clamp(1rem, 4vw, 1.75rem);
+  margin-bottom: 3rem;
+  padding: clamp(1.5rem, 5vw, 2rem);
   color: var(--ink);
   text-align: left;
   background: var(--paper);
   border-radius: 1rem;
-  box-shadow: 0.35rem 0.35rem 0 rgba(0, 0, 0, 0.4);
+  outline: 2px solid var(--claret);
+  outline-offset: -0.6rem;
+  box-shadow: 0.4rem 0.4rem 0 rgba(0, 0, 0, 0.4);
+}
+
+form h2 {
+  margin: 0;
 }
 
 label {
   display: block;
   font-weight: 700;
+  text-transform: capitalize;
 }
 
 input,
@@ -94,6 +146,7 @@ select:focus {
   border-color: var(--claret);
 }
 
+/* Buttons: big tap targets */
 button {
   min-width: 2.75rem;
   min-height: 2.75rem;
@@ -108,7 +161,8 @@ button {
   transition:
     background-color 0.15s,
     color 0.15s,
-    transform 0.1s;
+    transform 0.1s,
+    box-shadow 0.1s;
 }
 
 button:hover {
@@ -121,12 +175,35 @@ button:active {
   transform: translateY(2px);
 }
 
+/* The main action: a chunky vine-green key that presses down into its shadow */
+form button {
+  min-height: 3.25rem;
+  font-size: 1.125rem;
+  color: var(--ink);
+  background: var(--vine);
+  border-color: var(--ink);
+  box-shadow: 0.25rem 0.25rem 0 var(--ink);
+}
+
+form button:hover {
+  background: #c6e07d;
+  transform: translate(0.125rem, 0.125rem);
+  box-shadow: 0.125rem 0.125rem 0 var(--ink);
+}
+
+form button:active {
+  transform: translate(0.25rem, 0.25rem);
+  box-shadow: 0 0 0 var(--ink);
+}
+
+/* Visible keyboard focus on both dark and light backgrounds */
 :focus-visible {
   outline: 3px solid var(--ink);
   outline-offset: 2px;
   box-shadow: 0 0 0 6px var(--vine);
 }
 
+/* Variety list: each row is a cellar tag with a punched hole */
 ul {
   display: flex;
   flex-direction: column;
@@ -140,45 +217,79 @@ li {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  justify-content: space-between;
-  gap: 0.5rem 1rem;
-  padding: 0.875rem 1rem 0.875rem 1.25rem;
+  gap: 0.5rem 0.75rem;
+  padding: 0.875rem 1rem;
   font-size: 1.125rem;
   font-weight: 600;
   color: var(--ink);
   text-align: left;
   overflow-wrap: anywhere;
   background: var(--paper);
-  border-left: 0.6rem solid var(--vine-deep);
-  border-radius: 0.375rem 1rem 1rem 0.375rem;
+  border-radius: 0.5rem 1.5rem 1.5rem 0.5rem;
   box-shadow: 0.3rem 0.3rem 0 rgba(0, 0, 0, 0.4);
-  animation: label-in 0.25s ease-out;
+  animation: tag-in 0.3s ease-out backwards;
 }
 
-li button {
-  display: grid;
+/* On load the first rows drop in one after another */
+li:nth-child(2) {
+  animation-delay: 0.06s;
+}
+li:nth-child(3) {
+  animation-delay: 0.12s;
+}
+li:nth-child(4) {
+  animation-delay: 0.18s;
+}
+li:nth-child(5) {
+  animation-delay: 0.24s;
+}
+li:nth-child(6) {
+  animation-delay: 0.3s;
+}
+
+/* The punched hole */
+li::before {
+  content: '';
   flex: none;
+  width: 0.875rem;
+  height: 0.875rem;
+  margin-right: 0.25rem;
+  background: var(--claret);
+  border-radius: 50%;
+  box-shadow: inset 0.1rem 0.1rem 0 rgba(0, 0, 0, 0.5);
+}
+
+/* Row buttons: outlined pills. The first button (delete) pushes the group right. */
+li button {
+  flex: none;
+  color: var(--claret);
+  background: transparent;
+  border-color: var(--claret);
+  border-radius: 999px;
+}
+
+li button:first-of-type {
+  display: grid;
   place-items: center;
+  margin-left: auto;
   padding: 0;
   font-size: 1.25rem;
   line-height: 1;
   color: var(--danger);
-  background: transparent;
   border-color: var(--danger);
   border-radius: 50%;
 }
 
-li button:hover {
+li button:first-of-type:hover {
   color: #fff;
   background: var(--danger);
   border-color: var(--danger);
 }
 
-/* New items slide in when added */
-@keyframes label-in {
+@keyframes tag-in {
   from {
     opacity: 0;
-    transform: translateY(-0.5rem);
+    transform: translateY(-0.75rem);
   }
 }
 
