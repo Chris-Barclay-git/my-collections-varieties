@@ -22,7 +22,9 @@ function DeleteButton({ id }: Props) {
   return (
     <>
       {' '}
-      <button onClick={handleDelete}>X</button>
+      <button type="button" onClick={handleDelete} aria-label="Delete variety">
+        X
+      </button>
       {deleteMutation.error && <p>error... {deleteMutation.error.message}</p>}
     </>
   )
